@@ -1,6 +1,8 @@
 import * as got from 'got';
 
-var API_KEY = "3a942c751bbcb44bb13d97f651d4f062";
+const API_KEY = "";
+
+const baseUrl = "https://api.openweathermap.org/data/2.5/weather";
 
 export async function getWeatherFor(latlng_string) {
     if (typeof latlng_string != "string") {
@@ -9,11 +11,12 @@ export async function getWeatherFor(latlng_string) {
     if (!latlng_string.includes(',')) {
         throw new TypeError("String has no delimiter `,`")
     }
+
     return await got.get(buildUrl(urlLatLng(...latlng_string.split(',')))).text();
 }
 
 function buildUrl(args) {
-   return `${urlBase()}?${args}&${apiKey()}`
+   return `${baseUrl}?${args}&${apiKey()}`
 }
 
 function urlLatLng(lat,lon) {
@@ -28,8 +31,4 @@ function urlLatLng(lat,lon) {
 
 function apiKey() {
     return `appid=${API_KEY}`
-}
-
-function urlBase() {
-   return `https://api.openweathermap.org/data/2.5/weather`
 }
