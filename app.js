@@ -6,10 +6,11 @@ const app = express();
 
 app.get("/postcode/:postcode", (req, res) => {
     var postcode = req.params.postcode;
+        postcodes.lookup(postcode).then(data => {
+            return res.send(data);
 
-    postcodes.lookup(postcode).then(data => {
-        return res.send(data);
-
+        }).catch((error) => {
+        return res.status(400).send({status: 400, message: error.message});
     });
 });
 
@@ -18,7 +19,10 @@ app.get("/postcodes", (req, res) => {
 
     postcodes.batch_lookup(postcodesList).then(data => {
         return res.send(data);
+    }).catch((error) => {
+        return res.status(400).send({status: 400, message: error.message});
     });
+
 })
 
 app.get("/weather/:postcode", (req, res) => {
@@ -28,7 +32,10 @@ app.get("/weather/:postcode", (req, res) => {
         weather.getWeatherFor(latLonString).then(data => {
             return res.send(data);
         })
+    }).catch((error) => {
+        return res.status(400).send({status: 400, message: error.message});
     });
+
 })
 
 export default app;
